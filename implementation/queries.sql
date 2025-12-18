@@ -1,0 +1,144 @@
+/*
+In this file I present some of the queries constructed for the database designed: 
+*/
+
+-- Name of all airlines with a "Boeing" aircraft
+SELECT DISTINCT AL_NONBRE
+FROM AEROLINEA A
+JOIN AERONAVE AN ON A.AL_ID = AN.AL_ID
+JOIN MODELO M ON AN.ID_MODELO = M.ID_MODELO
+WHERE M.M_FABRICANTE = 'Boeing';
+
+-- Name and flight hours for all active captains with over 1000 hours
+SELECT E_NOMBRE, HORAS_VUELO
+FROM CAPITAN
+WHERE ACTIVO = true AND HORAS_VUELO > 1000;
+
+-- Airports located only in Colombian cities
+SELECT AP_NOM
+FROM AEROPUERTO AP
+JOIN CIUDAD C ON AP.C_ID = C.C_ID
+WHERE C.PAIS = 'Colombia';
+
+-- International trips
+SELECT R.R_ID, C1.PAIS AS PAIS_ORIGEN, C2.PAIS AS PAIS_DESTINO
+FROM RUTA R
+JOIN AEROPUERTO O ON R.AP_ORIGEN = O.AP_ICAO
+JOIN CIUDAD C1 ON O.C_ID = C1.C_ID
+JOIN AEROPUERTO D ON R.AP_DESTINO = D.AP_ICAO
+JOIN CIUDAD C2 ON D.C_ID = C2.C_ID
+WHERE C1.PAIS <> C2.PAIS;
+
+-- International flights made by captains who work for American Airlines
+SELECT V.FECHA, V.R_ID
+FROM VUELO V
+JOIN CAPITAN C ON V.E_CAPITAN_ID = C.E_ID
+WHERE C.AL_ID = 'AAL';
+
+-- Aircraft models that have a ćapacity for more than 200 pasangers:
+SELECT M_NOMBRE, M_FABRICANTE
+FROM MODELO
+WHERE M_PAX > 200;
+
+-- Cabin workers (tripulacion) that can work for the Boeing 737
+SELECT E_NOMBRE
+FROM TRIPULACION T
+WHERE NOT EXISTS (
+    SELECT ID_MODELO
+    FROM MODELO M
+    WHERE M.M_FABRICANTE = 'Boeing'
+    AND NOT EXISTS (
+        SELECT 1
+        FROM TIPO_LICENCIA TL
+        WHERE TL.ID_MODELO = M.ID_MODELO
+        AND TL.ID_LICENCIA = T.ID_LICENCIA
+    )
+);
+
+
+-- Licenses that will expire in less than 30 days
+SELECT C.E_NOMBRE, L.L_FECHA_VENCIMIENTO
+FROM CAPITAN C
+JOIN TIPO_LICENCIA TL ON C.ID_MODELO = TL.ID_MODELO AND C.ID_LICENCIA = TL.ID_LICENCIA
+JOIN LICENCIA L ON TL.ID_LICENCIA = L.ID_LICENCIA
+WHERE L.L_FECHA_VENCIMIENTO BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+UNION
+SELECT T.E_NOMBRE, L.L_FECHA_VENCIMIENTO
+FROM TRIPULACION T
+JOIN TIPO_LICENCIA TL ON T.ID_MODELO = TL.ID_MODELO AND T.ID_LICENCIA = TL.ID_LICENCIA
+JOIN LICENCIA L ON TL.ID_LICENCIA = L.ID_LICENCIA
+WHERE L.L_FECHA_VENCIMIENTO BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+UNION
+SELECT D.E_NOMBRE, L.L_FECHA_VENCIMIENTO
+FROM DESPACH D
+JOIN TIPO_LICENCIA TL ON D.ID_MODELO = TL.ID_MODELO AND D.ID_LICENCIA = TL.ID_LICENCIA
+JOIN LICENCIA L ON TL.ID_LICENCIA = L.ID_LICENCIA
+WHERE L.L_FECHA_VENCIMIENTO BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY);
+
+-- Total number of aircrafts per airline:
+SELECT AL_ID, COUNT(AN_ID) AS total_aeronaves
+FROM AERONAVE
+GROUP BY AL_ID;
+
+-- Avarage flight time from all captains per airline
+SELECT AL_ID, AVG(HORAS_VUELO) AS promedio_horas
+FROM CAPITAN
+GROUP BY AL_ID;
+
+-- Number of flights made per route
+SELECT R_ID, COUNT(*) AS total_vuelos
+FROM VUELO
+GROUP BY R_ID;
+
+-- Aircraft model with the highest capacity:
+SELECT MAX(M_PAX) AS max_pasajeros
+FROM MODELO;
+
+-- Number of active captains per airline
+SELECT AL_ID, COUNT(E_ID) AS total_capitanes_activos
+FROM CAPITAN
+WHERE ACTIVO = true
+GROUP BY AL_ID;
+
+-- Captains with a flight time higher than the avarage for captains with license for the same make
+SELECT C.E_NOMBRE, C.HORAS_VUELO, M.M_FABRICANTE
+FROM CAPITAN C
+INNER JOIN MODELO M ON C.ID_MODELO = M.ID_MODELO
+WHERE C.HORAS_VUELO > (
+    SELECT AVG(C2.HORAS_VUELO)
+    FROM CAPITAN C2
+    INNER JOIN MODELO M2 ON C2.ID_MODELO = M2.ID_MODELO
+    WHERE M2.M_FABRICANTE = M.M_FABRICANTE
+);
+
+-- flight attendats that work with aircraft models with a capacity higher than the avarage of models operated by the same airline:
+SELECT T.E_NOMBRE, T.AL_ID, M.M_NOMBRE, M.M_PAX
+FROM TRIPULACION T
+INNER JOIN MODELO M ON T.ID_MODELO = M.ID_MODELO
+WHERE M.M_PAX > (
+    SELECT AVG(M2.M_PAX)
+    FROM AERONAVE A
+    INNER JOIN MODELO M2 ON A.ID_MODELO = M2.ID_MODELO
+    WHERE A.AL_ID = T.AL_ID
+);
+
+-- Despatchers with a meteorológical certification that work in cities with more weather station than the national avarage:
+SELECT D.E_NOMBRE, D.CERT_METEOROLOGICO, CI.C_NOMBRE, CI.PAIS
+FROM DESPACH D
+INNER JOIN AEROLINEA AL ON D.AL_ID = AL.AL_ID
+INNER JOIN PLANNING P ON AL.AL_ID = P.AL_ID
+INNER JOIN AEROPUERTO AP ON P.AP_ICAO = AP.AP_ICAO
+INNER JOIN CIUDAD CI ON AP.C_ID = CI.C_ID
+WHERE D.CERT_METEOROLOGICO = 1
+AND (
+    SELECT COUNT(*)
+    FROM ESTACION_CLIMA EC
+    WHERE EC.C_ID = CI.C_ID
+) > (
+    SELECT AVG(estaciones_por_ciudad.conteo)
+    FROM (
+        SELECT COUNT(*) AS conteo
+        FROM ESTACION_CLIMA
+        GROUP BY C_ID
+    ) estaciones_por_ciudad
+);
