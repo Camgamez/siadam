@@ -12,7 +12,7 @@ Ok, ok, I'll get to the meat of the project. Fast forward a couple of days, the 
 
 Next class, the teacher starts with: "As reassignment week is over, it's good if you guys start choosing groups for the project" and follows it up with "remember you will have to design a database with at least 10 entities. You will be able to choose any topic, just don't come with projects about school courses. I want something interesting, you get points if you resolve a real life problem".
 
-Long story short, this repo is the story of how you learnt how to design and query databases despite having an annoying teacher. For organization purposes, you will find a detailed description of the project in the [project-sumary.md](project-sumary.md) file. Further reading can be found on the /Documentation folder. On one hand, the [Methodology.md]() file describes the steps taken to ensure the database is designed with approriate normalization. On the other hand, the [queries-and-development]() file describes the steps taken to create the queries and develop a data-entry website to go along with the database.
+Long story short, this repo is the story of how you learnt how to design and query databases despite having an annoying teacher. For organization purposes, you will find a detailed description of the project in the [project-sumary.md](project_sumary.md) file. Further reading can be found on the /Documentation folder. On one hand, the [Methodology.md]() file describes the steps taken to ensure the database is designed with approriate normalization. On the other hand, the [queries-and-development]() file describes the steps taken to create the queries and develop a data-entry website to go along with the database.
 
 ## Just a quick PSA
 
