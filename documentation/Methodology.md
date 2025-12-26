@@ -20,4 +20,4 @@ You have chosen the topic for your database: aeronautics and meteorology. You ha
 
 And you start working with your team on the project. 
 
-![Conceptual Model](/diagrams/CDM.png)
+![Conceptual Model](/diagrams/CDM.jpeg)
