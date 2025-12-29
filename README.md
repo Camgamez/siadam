@@ -4,7 +4,7 @@ Imagine: it's 11 am on a Wednesday morning, the capital-city morning rush is slo
 
 You remind yourself of the email you sent to the teacher asking about the topics of the first class, that went completely unanswered. It was never about asking if the class could be done remotely. You were just trying to let them know that due to your work schedule, you were unable to assist that first class. Did he read it in that tone? 
 
-You sit down at the first computer you find available in the room, the teacher comes in, looks at you and a couple other students and inmediatly says "oh, I see new faces! Wonderful, we can review the rules again." and proceeds to rant about how the grade is 50% a knowlegde review and 50% a proyect, then ends up the rant saying that only 5% of all the students he's ever had have received a grade above 4.3 over 5, and you can only think "He is a one of those old school teachers that beleives you learn more when you suffer. This is going to be interesting."
+You sit down at the first computer you find available in the room, the teacher comes in, looks at you and a couple other students and inmediatly says "oh, I see new faces! Wonderful, we can review the rules again." and proceeds to rant about how the grade is 50% a knowlegde review and 50% a proyect, then ends up the rant saying that only 5% of all the students he's ever had have received a grade above 4 over 5, and you can only think "He is a one of those old school teachers that beleives you learn more when you suffer. This is going to be interesting."
 
 ## But what is this github all about?
 
