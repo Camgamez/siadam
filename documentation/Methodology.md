@@ -63,6 +63,6 @@ With the logical model done, you can easily jump into the phisical model which i
 
 ![Physical Model](diagrams/PDM.jpeg)
 
-You mostly managed to easily jump from the logical model to the phisical model as you are using Power Designer with a license provided by the school. This helps you check the models for errors and even generate the [SQL script](implementation/siadam_schema.sql) to initiate the database on database manager. 
+You mostly managed to easily jump from the logical model to the phisical model as you are using Power Designer with a license provided by the school. This helps you check the models for errors and even generate the [SQL script](/implementation/siadam_schema.sql) to initiate the database on database manager. 
 
-
+Wonderful, the project is comming along nicely and timely. So you start working on creating the [queries](/implementation/queries.sql) file with your team. And once you are almost done with everything, the teacher decides to ask for a fully developed dataentry program before the end of the semester. Keep in mind there's only two weeks left. 

@@ -21,4 +21,3 @@ Oh yeah! you are right, let me get back to business, cus by the end of that clas
 
  1. We have to design a database with at least 10 different entities. 
  2. From the database created we must show 18 different functioning queries.
- - Extra points if there is a dataentry app. 
